@@ -51,7 +51,7 @@
                                                 <div class="checkbox">
                                                         <input id="checkbox-{{elem.name}}" type="checkbox">
                                                         <label for="checkbox-{{elem.name}}" >
-                                                                <button class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;  text-transform: uppercase;" disabled="">
+                                                                <button id="btn-filter-{{elem.name}}"class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;  text-transform: uppercase;" disabled="">
                                                                         <img src="static/img/ico/white/bass-guitar.png" width="16px" height="16px" style="margin-right:5px; "/> {{ elem.name }}
             
                                                                     </button>
@@ -68,7 +68,7 @@
                             
                     </div>
                 
-                <div class="row">
+                <!-- <div class="row">
                     <div class="container">
                         {% for elem in elements %}
                         <h1> Name: {{ elem.name }}</h1>
@@ -76,7 +76,7 @@
                         <h1>Min Value: {{ elem.max }}</h1>
                         {% endfor %}
                     </div>
-                </div>
+                </div> -->
                 
             </div>
             
@@ -124,22 +124,16 @@
 <script type="text/javascript">
  $(document).ready(function() {
         // the body of this function is in assets/js/now-ui-kit.js
-        $('input[type=checkbox]').change(function(event){
-            console.log("Button Clicked");
-            if($(this).prop('checked')){
-                $(event.target).next().children().attr( "disabled", false );
-            }else{
-                $(event.target).next().children().attr( "disabled", true );
-            }
-        });
         $.ajax({
             type:'GET',
             url: '/filters',
             dataType:'json',
             success: function(data){
                 $.each(data,function(index,item){
-                    var itemId=document.getElementById("slider-"+item.name)
-                    noUiSlider.create(itemId, {
+                    var sliderId=document.getElementById("slider-"+item.name);
+                    var checkboxId=document.getElementById("checkbox-"+item.name);
+                    console.log("Name: ",item.name,"Min",item.min,"Max",item.max);
+                    noUiSlider.create(sliderId, {
                         start: item.min,
                         connect: [true, false],
                         range: {
@@ -147,14 +141,28 @@
                         max: item.max
                         }
                     });
-                    itemId.noUiSlider.on('change',function(values, handle, unencoded, tap, positions){
+                    if(!$(checkboxId).is(':checked')){
+                        sliderId.setAttribute('disabled',true);
+                    }
+                    sliderId.noUiSlider.on('change',function(values, handle, unencoded, tap, positions){
                     console.log(values[0]);
                     });
-                    $.each(item,function(key,value){
-                        console.log(key,value);
+                    $(checkboxId).change(function(event){
+                     console.log("Button Clicked");
+                        if($(this).prop('checked')){
+                            $(event.target).next().children().attr( "disabled", false );
+                            sliderId.removeAttribute('disabled');
+                
+                        }else{
+                            $(event.target).next().children().attr( "disabled", true );
+                            sliderId.setAttribute('disabled',true);
+                        }
+                    });
+                    // $.each(item,function(key,value){
+                    //     console.log(key,value);
                         
 
-                    });
+                    // });
 
                 });
 
@@ -188,18 +196,18 @@
         // });
             // "{%endfor%}"
        
-        var ids=["slider-Energy","slider-Liveness","slider-Temp","slider-Speechiness","slider-SoundQuality","slider-Duration","slider-Loudness","slider-Valence","slider-Danceability"];
-        for (var i=0;i<ids.length;i++){
-            slider= document.getElementById(ids[i]);
-            noUiSlider.create(slider, {
-            start: -23.0,
-            connect: [true, false],
-            range: {
-                min: -23.0,
-                max: 0
-            }
-        });
-        };
+        // var ids=["slider-Energy","slider-Liveness","slider-Temp","slider-Speechiness","slider-SoundQuality","slider-Duration","slider-Loudness","slider-Valence","slider-Danceability"];
+        // for (var i=0;i<ids.length;i++){
+        //     slider= document.getElementById(ids[i]);
+        //     noUiSlider.create(slider, {
+        //     start: -23.0,
+        //     connect: [true, false],
+        //     range: {
+        //         min: -23.0,
+        //         max: 0
+        //     }
+        // });
+        // };
     });
 // $('#sliderRegular').noUiSlider({
 // 	start: 40,

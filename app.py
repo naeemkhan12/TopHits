@@ -68,8 +68,8 @@ def filters():
     filters=['energy','liveness','tempo','speechiness','Sound_quailty','instrumentalness','duration','loudness','valence','danceability']
     elements=[]
     for attr in filters:
-        max_value=songs.find({},{attr:1,"_id":0}).sort("loudness",-1).limit(1)
-        min_value=songs.find({},{attr:1,"_id":0}).sort("loudness",1).limit(1)
+        max_value=songs.find({attr:{"$ne" :"NULL"}}).sort(attr,-1).limit(1)
+        min_value=songs.find({attr:{"$ne" :"NULL"}}).sort(attr,1).limit(1)
         elem = {
             'name':attr,
             'max': max_value[0][attr],
