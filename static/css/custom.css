@@ -11,7 +11,12 @@
     position: relative;
     
 }
-.background-static .content-center{
-    margin-top: 40%;
+.background-static .row {
+    margin-top: 20%;
+    
+}
+.section-examples .card{
+    background: #2c2c2c;
+    color: #FFF;
 }
 

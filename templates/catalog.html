@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="wrapper">
+    <div class="page-header page-header-small" filter-color="orange">
+        <div class="page-header-image" data-parallax="true" style="background-image: url('static/img/classic.jpg');">
+        </div>
+        <div class="container">
+            <div class="content-center">
+                <!-- <div class="photo-container">
+                    <img src="static/img/ryan.jpg" alt="">
+                </div>
+                <h3 class="title">Ryan Scheinder</h3>
+                <p class="category">Photographer</p>
+                <div class="content">
+                    <div class="social-description">
+                        <h2>26</h2>
+                        <p>Comments</p>
+                    </div>
+                    <div class="social-description">
+                        <h2>26</h2>
+                        <p>Comments</p>
+                    </div>
+                    <div class="social-description">
+                        <h2>48</h2>
+                        <p>Bookmarks</p>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="container">
+            <!-- <div class="button-container">
+                <a href="#button" class="btn btn-primary btn-round btn-lg">Follow</a>
+                <a href="#button" class="btn btn-default btn-round btn-lg btn-icon" rel="tooltip" title="Follow me on Twitter">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a href="#button" class="btn btn-default btn-round btn-lg btn-icon" rel="tooltip" title="Follow me on Instagram">
+                    <i class="fa fa-instagram"></i>
+                </a>
+            </div> -->
+            <h3 class="title">Catalog of Songs</h3>
+            <h5 class="description">Find the song of your taste from a collection of more than 600 top hits.</h5>
+            <div class="container">
+                <div class="row">
+                            <div class="col-sm-6 col-lg-3">
+                                    <div class="checkbox">
+                                            <input id="checkbox1" type="checkbox" >
+                                            <label for="checkbox1" >
+                                                    <button class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;">
+                                                            <img src="static/img/ico/bass-guitar.png" width="16px" height="16px" style="margin-right:5px;"/> Energy
+
+                                                        </button>
+                                                <!-- <button class="btn btn-success">HEllo</button> -->
+                                                
+                                            </label>
+                                            <input id="checkbox2" type="checkbox" >
+                                            <label for="checkbox2" >
+                                                    <button class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;">
+                                                            <img src="static/img/ico/bass-guitar.png" width="16px" height="16px" style="margin-right:5px;"/> Liveness
+
+                                                        </button>
+                                                <!-- <button class="btn btn-success">HEllo</button> -->
+                                            </label>
+                                            <input id="checkbox3" type="checkbox" >
+                                            <label for="checkbox3" >
+                                                    <button class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;">
+                                                            <img src="static/img/ico/bass-guitar.png" width="16px" height="16px" style="margin-right:5px;"/> Tempo
+
+                                                        </button>
+                                                <!-- <button class="btn btn-success">HEllo</button> -->
+                                            </label>
+                                            <input id="checkbox4" type="checkbox" >
+                                            <label for="checkbox4" >
+                                                    <button class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;">
+                                                            <img src="static/img/ico/bass-guitar.png" width="16px" height="16px" style="margin-right:5px;"/> Speechiness
+
+                                                        </button>
+                                                <!-- <button class="btn btn-success">HEllo</button> -->
+                                            </label>
+                                            <input id="checkbox5" type="checkbox" >
+                                            <label for="checkbox5" >
+                                                    <button class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;">
+                                                            <img src="static/img/ico/bass-guitar.png" width="16px" height="16px" style="margin-right:5px;"/> Sound Quality
+
+                                                        </button>
+                                                <!-- <button class="btn btn-success">HEllo</button> -->
+                                            </label>
+                                            <input id="checkbox6" type="checkbox" >
+                                            <label for="checkbox6" >
+                                                    <button class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;">
+                                                            <img src="static/img/ico/bass-guitar.png" width="16px" height="16px" style="margin-right:5px;"/> Instrumentalness
+
+                                                        </button>
+                                                <!-- <button class="btn btn-success">HEllo</button> -->
+                                            </label>
+                                            <input id="checkbox7" type="checkbox" >
+                                            <label for="checkbox7" >
+                                                    <button class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;">
+                                                            <img src="static/img/ico/bass-guitar.png" width="16px" height="16px" style="margin-right:5px;"/> Duration
+
+                                                        </button>
+                                                <!-- <button class="btn btn-success">HEllo</button> -->
+                                            </label>
+                                            <input id="checkbox8" type="checkbox" >
+                                            <label for="checkbox8" >
+                                                    <button class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;">
+                                                            <img src="static/img/ico/bass-guitar.png" width="16px" height="16px" style="margin-right:5px;"/> Loudness
+
+                                                        </button>
+                                                <!-- <button class="btn btn-success">HEllo</button> -->
+                                            </label>
+                                            <input id="checkbox9" type="checkbox" >
+                                            <label for="checkbox9" >
+                                                    <button class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;">
+                                                            <img src="static/img/ico/bass-guitar.png" width="16px" height="16px" style="margin-right:5px;"/> Valence
+
+                                                        </button>
+                                                <!-- <button class="btn btn-success">HEllo</button> -->
+                                            </label>
+                                            <input id="checkbox10" type="checkbox" >
+                                            <label for="checkbox10" >
+                                                    <button class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;">
+                                                            <img src="static/img/ico/bass-guitar.png" width="16px" height="16px" style="margin-right:5px;"/> Danceability
+
+                                                        </button>
+                                                <!-- <button class="btn btn-success">HEllo</button> -->
+                                            </label>
+
+                                            <!-- <br>
+                                            <br>
+                                             -->
+                                            
+                                    </div>
+                                    <!-- <div id="sliderRegular" class="slider slider-primary"></div>
+                                    <br>
+                                    <div id="sliderDouble" class="slider slider-info"></div> -->
+                                    
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                    <div id="slider-Energy" class="slider slider-primary" style="margin-top: 15px;"></div>
+                                    <div id="slider-Liveness" class="slider slider-primary" style="margin-top: 36px;"></div>
+                                    <div id="slider-Temp" class="slider slider-primary" style="margin-top: 36px;"></div>
+                                    <div id="slider-Speechiness" class="slider slider-primary" style="margin-top: 36px;"></div>
+                                    <div id="slider-SoundQuality" class="slider slider-primary" style="margin-top: 36px;"></div>
+                                    <div id="slider-Instrumentalness" class="slider slider-primary" style="margin-top: 36px;"></div>
+                                    <div id="slider-Duration" class="slider slider-primary" style="margin-top: 36px;"></div>
+                                    <div id="slider-Loudness" class="slider slider-primary" style="margin-top: 36px;"></div>
+                                    <div id="slider-Valence" class="slider slider-primary" style="margin-top: 36px;"></div>
+                                    <div id="slider-Danceability" class="slider slider-primary" style="margin-top: 36px;"></div>
+                                    <!-- <br>
+                                    <div id="sliderDouble" class="slider slider-info" style="margin-top: 10px;"></div> -->
+                                    
+                            </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <footer class="footer footer-default">
+        <div class="container">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="https://www.creative-tim.com">
+                            Creative Tim
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://presentation.creative-tim.com">
+                            About Us
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://blog.creative-tim.com">
+                            Blog
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/creativetimofficial/now-ui-kit/blob/master/LICENSE.md">
+                            MIT License
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="copyright">
+                &copy;
+                <script>
+                    document.write(new Date().getFullYear())
+                </script>, Designed by
+                <a href="http://www.invisionapp.com" target="_blank">Invision</a>. Coded by
+                <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a>.
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+ $(document).ready(function() {
+        // the body of this function is in assets/js/now-ui-kit.js
+        
+        var ids=["slider-Energy","slider-Liveness","slider-Temp","slider-Speechiness","slider-SoundQuality","slider-Duration","slider-Loudness","slider-Valence","slider-Danceability"];
+        for (var i=0;i<ids.length;i++){
+            slider= document.getElementById(ids[i]);
+            noUiSlider.create(slider, {
+            start: 40,
+            connect: [true, false],
+            range: {
+                min: 0,
+                max: 100
+            }
+        });
+
+        }
+        
+    });
+// $('#sliderRegular').noUiSlider({
+// 	start: 40,
+// 	connect: "lower",
+// 	range: {
+// 	    min: 0,
+// 	    max: 100
+// 	}
+// });
+// $('#sliderDouble').noUiSlider({
+// 	start: 20,
+// 	connect: "lower",
+// 	range: {
+// 	    min: 0,
+// 	    max: 100
+// 	}
+// });
+</script>
+{% endblock %}
