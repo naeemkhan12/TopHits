@@ -1,6 +1,5 @@
-*.jpg
-*.png
-img
+
 fonts
 sass
 
+__pycache__
