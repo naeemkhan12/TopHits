@@ -77,7 +77,12 @@ def filters():
         }
         elements.append(elem)
     return jsonify(elements)
-
+@app.route('/filters/attributes',methods=['POST'])
+def filter_on_attr():
+    app.logger.debug(request.get_json())
+    content=request.get_json();
+    # content = [{'name':'item','min':34,'max':23}]
+    return jsonify(content)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
