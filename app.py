@@ -8,6 +8,7 @@ from user import User
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_pymongo import PyMongo
 from werkzeug.security import generate_password_hash
+from bson.son import SON
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -81,7 +82,10 @@ def filters():
 def filter_on_attr():
     app.logger.debug(request.get_json())
     content=request.get_json();
-    # content = [{'name':'item','min':34,'max':23}]
+    for item in content:
+        name=item['name']
+        value=item['value']
+        #pipeline=[{ "$project":{ "title":"$song_title",name: { "$min": [value,"$"+name] }}}, {"$sort":SON([(name,-1)])},{"$limit":5}]
     return jsonify(content)
 
 @app.route('/login', methods=['POST', 'GET'])

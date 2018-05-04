@@ -67,16 +67,33 @@
                     {% endfor %}
 
                 </div>
+                <div class="container">
+                    <table class="table" id='results'>
+                        <!-- <thead>
+                            <tr>
+                                <td>Song Title</td>
+                                <td>Artist Name</td>
+                                <td>Something Else</td>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td>One</td>
+                            <td>One</td>
+                            <td>One</td>
+                        </tr>
+                        <tr>
+                            <td>One</td>
+                            <td>One</td>
+                            <td>One</td>
+                        </tr>
+                        <tr>
+                            <td>One</td>
+                            <td>One</td>
+                            <td>One</td>
+                        </tr> -->
+                    </table>
+                </div>
 
-                <!-- <div class="row">
-                    <div class="container">
-                        {% for elem in elements %}
-                        <h1> Name: {{ elem.name }}</h1>
-                        <h1> Max Value: {{ elem.min }}</h1>
-                        <h1>Min Value: {{ elem.max }}</h1>
-                        {% endfor %}
-                    </div>
-                </div> -->
 
             </div>
 
@@ -148,7 +165,7 @@
                             var sliderItem=document.getElementById("slider-" + element.name);
                             if(!sliderItem.hasAttribute('disabled')){
                                 console.log("Name: ", element.name, "Min: ", element.min, "Max: ", element.max, "Current: ", sliderItem.noUiSlider.get());
-                                jsonData.push({'name': element.name,'value': sliderItem.noUiSlider.get()});
+                                jsonData.push({name: element.name,value: sliderItem.noUiSlider.get()});
                             }
                         });
                         // $.post('/filters/attributes',jsonData, function(data,status){
@@ -163,9 +180,12 @@
                             data: JSON.stringify(jsonData),
                             success: function(data,status){
                                 console.log("Data has Been Sent",data,status);
-                                 
+                                response=data;
+                                titles=['My life','Be together','work work work','Dance Dance','Let be'];
+                                createTable([{Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)},
+                                {Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)},
+                                {Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)}]);
                             }
-
                         });
                     });
                     $(checkboxId).change(function (event) {
@@ -189,60 +209,31 @@
             }
 
         });
-        //     var nonLinearSlider = document.getElementsByClassName('slider');
-        //     $(nonLinearSlider).each(function(i, val){
-        //     noUiSlider.create(nonLinearSlider[i], {
-        //     start: -23.0,
-        //     connect: [true, false],
-        //         range: {
-        //             min: -23.0,
-        //             max: 0
-        //         }
-        //     });
-        // });
-        // console.log("{{elements|length}}");
-        // var lengthOfFilters="{{elements|length}}";
-        //     "{% for elem in elements %}"
-        //         console.log("{{elem.name}}")
-        //         var elementName="{{elem.name}}";
-        //         console.log(elementName);
-        //         noUiSlider.create(String(elementName),{
-        //         start: -23.0,
-        //         connect: [true, false],
-        //         range: {
-        //         min: -23.0,
-        //         max: 0
-        //     }
-        // });
-        // "{%endfor%}"
-
-        // var ids=["slider-Energy","slider-Liveness","slider-Temp","slider-Speechiness","slider-SoundQuality","slider-Duration","slider-Loudness","slider-Valence","slider-Danceability"];
-        // for (var i=0;i<ids.length;i++){
-        //     slider= document.getElementById(ids[i]);
-        //     noUiSlider.create(slider, {
-        //     start: -23.0,
-        //     connect: [true, false],
-        //     range: {
-        //         min: -23.0,
-        //         max: 0
-        //     }
-        // });
-        // };
+        function createTable(data){
+            if(!$('#results').empty()){
+                $('#results tr').remove();
+                console.log('data is removed');
+            }
+            tHeader=$('<thead></thead>');
+                tHeaderRow=$('<tr></tr>');
+                if(data[0]!=null){
+                    Object.keys(data[0]).forEach(function(key){
+                        tHeaderRow.append($('<td></td>').text(key));
+                        // console.log(key);
+                    });
+                    tHeader.append(tHeaderRow);
+                    $('#results').append(tHeader);         
+                }
+                data.forEach(function(item){
+                    tRow=$('<tr></tr>');
+                    Object.keys(item).forEach(function(key) {  
+                        // alert(item[key]); // alerts value
+                        tRow.append($('<td></td>').text(item[key]));
+                        console.log(item[key]);
+                    });
+                    $('#results').append(tRow);
+                });
+        }
+       
     });
-// $('#sliderRegular').noUiSlider({
-// 	start: 40,
-// 	connect: "lower",
-// 	range: {
-// 	    min: 0,
-// 	    max: 100
-// 	}
-// });
-// $('#sliderDouble').noUiSlider({
-// 	start: 20,
-// 	connect: "lower",
-// 	range: {
-// 	    min: 0,
-// 	    max: 100
-// 	}
-// });
 </script> {% endblock %}
