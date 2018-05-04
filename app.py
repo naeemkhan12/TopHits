@@ -51,22 +51,12 @@ def getcontactUs():
 @app.route('/catalog')
 def catalog():
     songs=mongo.db.songs
-    filters=['energy','liveness','tempo','speechiness','Sound_quailty','instrumentalness','duration','loudness','valence','danceability']
-    elements=[]
-    for attr in filters:
-        max_value=songs.find({},{attr:1,"_id":0}).sort("loudness",1).limit(1)
-        min_value=songs.find({},{attr:1,"_id":0}).sort("loudness",-1).limit(1)
-        elem = {
-            'name':attr,
-            'max': max_value[0][attr],
-            'min': min_value[0][attr]
-        }
-        elements.append(elem)
-    return render_template('catalog.html',elements=elements)
+    filters=['energy','liveness','tempo','speechiness','Sound_quailty','instrumentalness','duration','loudness','valence','danceability','key']
+    return render_template('catalog.html',elements=filters)
 @app.route('/filters')
 def filters():
     songs=mongo.db.songs
-    filters=['energy','liveness','tempo','speechiness','Sound_quailty','instrumentalness','duration','loudness','valence','danceability']
+    filters=['energy','liveness','tempo','speechiness','Sound_quailty','instrumentalness','duration','loudness','valence','danceability','key']
     elements=[]
     for attr in filters:
         max_value=songs.find({attr:{"$ne" :"NULL"}}).sort(attr,-1).limit(1)
