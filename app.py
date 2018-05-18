@@ -80,8 +80,6 @@ def filter_on_attr():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    if current_user.username is not None:
-        return redirect(url_for('profile'))
     if request.method == 'POST':
         user = mongo.db.users.find_one({"name": request.form['username']})
         if user and User.validate_login(user['password'], request.form['password']):
