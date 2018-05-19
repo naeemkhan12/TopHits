@@ -6,13 +6,14 @@ from flask_pymongo import PyMongo
 from flask.ext.login import LoginManager
 from user import User
 from flask_login import login_user, logout_user, login_required, current_user
-from flask_pymongo import PyMongo
+from pymongo import MongoClient
 from werkzeug.security import generate_password_hash
 from bson.son import SON
+import pprint
 
 app = Flask(__name__)
 app.config.from_object('config')
-mongo = PyMongo(app,config_prefix='MONGO')
+db = MongoClient().TopHits
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
@@ -27,7 +28,7 @@ lm.login_view = 'login'
 @app.route('/' , methods=['GET','POST'])
 def home():
     if request.method == 'POST':
-        users=mongo.db.users;
+        users=db.users;
         existing_user = users.find_one({'name': request.form['username']})
         if existing_user is None:
             password = request.form['password']
@@ -50,12 +51,12 @@ def getcontactUs():
     return render_template("contactus.html")
 @app.route('/catalog')
 def catalog():
-    songs=mongo.db.songs
+    songs=db.songs
     filters=['energy','liveness','tempo','speechiness','Sound_quailty','instrumentalness','duration','loudness','valence','danceability','key']
     return render_template('catalog.html',elements=filters)
 @app.route('/filters')
 def filters():
-    songs=mongo.db.songs
+    songs=db.songs
     filters=['energy','liveness','tempo','speechiness','Sound_quailty','instrumentalness','duration','loudness','valence','danceability','key']
     elements=[]
     for attr in filters:
@@ -70,18 +71,43 @@ def filters():
     return jsonify(elements)
 @app.route('/filters/attributes',methods=['POST'])
 def filter_on_attr():
-    app.logger.debug(request.get_json())
+    # app.logger.debug(request.get_json())
     content=request.get_json();
     for item in content:
         name=item['name']
         value=item['value']
         #pipeline=[{ "$project":{ "title":"$song_title",name: { "$min": [value,"$"+name] }}}, {"$sort":SON([(name,-1)])},{"$limit":5}]
-    return jsonify(content)
+    query_result=query_builder(content)
+    return jsonify(query_result)
+
+def query_builder(values):
+    query_values= dict()
+    sort_values=[]
+    query=[]
+    # results= { $project:{ title:"$song_title",loudness: { $min: [-11.091,"$loudness"] },key: { $min: [5,"$key"] }}}
+    # $project:{ title:"$song_title",loudness: { $min: [-11.091,"$loudness"] },key: { $min: [5,"$key"] }}
+    # db.songs.aggregate([{ $project:{ title:"$song_title",loudness: { $min: [-11.091,"$loudness"] },key: { $min: [5,"$key"] }}}, {$sort:{loudness:-1,key:-1}},{$limit:5}])
+    query_values.update({"_id":0})
+    query_values.update({"title":"$song_title"})
+    for value in values:
+        query_values.update({value['name']: {"$min": [value['value'],"$"+value['name']]}})
+        sort_values.append((value['name'],-1))
+    query.append({"$project":query_values})
+    query.append({"$sort":SON(sort_values)})
+    query.append({"$limit":5})
+    query_result=list(db.songs.aggregate(query))
+    # app.logger.debug(pprint.pprint(query_result))
+    # for value in query_result:
+    #     app.logger.debug(value)
+    #     for key in values:
+    #         app.logger.debug(value[key])
+    return query_result
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        user = mongo.db.users.find_one({"name": request.form['username']})
+        user = db.users.find_one({"name": request.form['username']})
         if user and User.validate_login(user['password'], request.form['password']):
             user_obj = User(user['name'])
             login_user(user_obj)
@@ -96,7 +122,7 @@ def logout():
 
 @lm.user_loader
 def load_user(username):
-    u = mongo.db.users.find_one({"name": username})
+    u = db.users.find_one({"name": username})
     if not u:
         return None
     return User(u['name'])

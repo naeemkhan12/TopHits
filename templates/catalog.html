@@ -29,6 +29,36 @@
     </div>
     <div class="section">
         <div class="container">
+                <h3 class="title">Popular Searches</h3>
+                <h5 class="description">Common searches made by billions of people based on their interestes,
+                    yours might lie in between them. Check this out . . .
+                </h5>
+                <div class="dropdown">
+                        <a id="dropdown" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink2">
+                            A few Commonly Used Searches by Other People
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
+                            <a class="dropdown-item" href="#">
+                                    What are the top 5 most pleasant songs across all years?
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">
+                                    What are the top 10 songs with maximum energy across all years?
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">
+                                    What are the 5 songs with minimum sound quailty?
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">
+                                    What are the 10 most danceable songs from the 2000's?
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">
+                                    What are the 5 songs with lowest tempi across all years?
+                            </a>
+                        </ul>
+                    </div>
             <!-- <div class="button-container">
                 <a href="#button" class="btn btn-primary btn-round btn-lg">Follow</a>
                 <a href="#button" class="btn btn-default btn-round btn-lg btn-icon" rel="tooltip" title="Follow me on Twitter">
@@ -38,21 +68,23 @@
                     <i class="fa fa-instagram"></i>
                 </a>
             </div> -->
-            <h3 class="title">Catalog of Songs</h3>
-            <h5 class="description">Find the song of your taste from a collection of more than 600 top hits.</h5>
+            <h3 class="title">Advanced Queries</h3>
+            <h5 class="description">If common popular searches does not cover your interest, here is an 
+                advanced query to find songs with granular control over song's attributes. Check this out . . .
+            </h5>
             <div class="container">
                 <div class="row">
                     {% for elem in elements%}
                     <div class="col-sm-6">
                         <div class="container">
-                            <div class="row">
+                            <div class="row" style="padding: 5px">
                                 <div class="col">
                                     <div class="checkbox">
                                         <input id="checkbox-{{elem}}" type="checkbox">
                                         <label for="checkbox-{{elem}}">
                                             <button id="btn-filter-{{elem}}" class="btn btn-primary text-center" style="margin-top:0; padding: 5px 15px 5px 15px;  text-transform: uppercase;"
                                                 disabled="">
-                                                <img src="static/img/ico/white/bass-guitar.png" width="16px" height="16px" style="margin-right:5px; " /> {{ elem }}
+                                                <img src="static/img/ico/white/{{elem}}.png" width="16px" height="16px" style="margin-right:5px; " /> {{ elem }}
 
                                             </button>
                                         </label>
@@ -69,28 +101,6 @@
                 </div>
                 <div class="container">
                     <table class="table" id='results'>
-                        <!-- <thead>
-                            <tr>
-                                <td>Song Title</td>
-                                <td>Artist Name</td>
-                                <td>Something Else</td>
-                            </tr>
-                        </thead>
-                        <tr>
-                            <td>One</td>
-                            <td>One</td>
-                            <td>One</td>
-                        </tr>
-                        <tr>
-                            <td>One</td>
-                            <td>One</td>
-                            <td>One</td>
-                        </tr>
-                        <tr>
-                            <td>One</td>
-                            <td>One</td>
-                            <td>One</td>
-                        </tr> -->
                     </table>
                 </div>
 
@@ -150,6 +160,7 @@
                     var checkboxId = document.getElementById("checkbox-" + item.name);
                     noUiSlider.create(sliderId, {
                         start: item.min,
+                        tooltips:[true],
                         connect: [true, false],
                         range: {
                             min: item.min,
@@ -164,14 +175,14 @@
                         data.forEach(element => {
                             var sliderItem=document.getElementById("slider-" + element.name);
                             if(!sliderItem.hasAttribute('disabled')){
-                                console.log("Name: ", element.name, "Min: ", element.min, "Max: ", element.max, "Current: ", sliderItem.noUiSlider.get());
+                                // console.log("Name: ", element.name, "Min: ", element.min, "Max: ", element.max, "Current: ", sliderItem.noUiSlider.get());
                                 jsonData.push({name: element.name,value: sliderItem.noUiSlider.get()});
                             }
                         });
                         // $.post('/filters/attributes',jsonData, function(data,status){
                         // console.log(data,status);
                         // });
-                        console.log(jsonData);
+                        // console.log(jsonData);
                         $.ajax({
                             type:'POST',
                             url: '/filters/attributes',
@@ -179,12 +190,14 @@
                             contentType: "application/json; charset=utf-8",
                             data: JSON.stringify(jsonData),
                             success: function(data,status){
-                                console.log("Data has Been Sent",data,status);
+                                // console.log("Data has Been Sent",data,status);
                                 response=data;
-                                titles=['My life','Be together','work work work','Dance Dance','Let be'];
-                                createTable([{Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)},
-                                {Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)},
-                                {Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)}]);
+                                console.log(data);
+                                createTable(data);
+                                // titles=['My life','Be together','work work work','Dance Dance','Let be'];
+                                // createTable([{Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)},
+                                // {Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)},
+                                // {Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)}]);
                             }
                         });
                     });
@@ -212,13 +225,13 @@
         function createTable(data){
             if(!$('#results').empty()){
                 $('#results tr').remove();
-                console.log('data is removed');
+                // console.log('data is removed');
             }
-            tHeader=$('<thead></thead>');
+            tHeader=$('<thead class="thead-striped"></thead>');
                 tHeaderRow=$('<tr></tr>');
                 if(data[0]!=null){
                     Object.keys(data[0]).forEach(function(key){
-                        tHeaderRow.append($('<td></td>').text(key));
+                        tHeaderRow.append($('<th></th>').text(key.toUpperCase()));
                         // console.log(key);
                     });
                     tHeader.append(tHeaderRow);
@@ -229,7 +242,7 @@
                     Object.keys(item).forEach(function(key) {  
                         // alert(item[key]); // alerts value
                         tRow.append($('<td></td>').text(item[key]));
-                        console.log(item[key]);
+                        // console.log(item[key]);
                     });
                     $('#results').append(tRow);
                 });
