@@ -74,16 +74,32 @@
                             <a href="#" class="btn btn-default dropdown-toggle " data-toggle="dropdown" id="navbarDropdownMenuLink2">
                                 Year
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
-                                <button class="dropdown-item">1950s</button>
-                                <button class="dropdown-item">1960s</button>
-                                <!-- <div class="dropdown-divider"></div> -->
-                                <button class="dropdown-item">1970s</button>
-                                <!-- <div class="dropdown-divider"></div> -->
-                                <button class="dropdown-item">1980s</button>
-                                <button class="dropdown-item">1990s</button>
-                                <button class="dropdown-item">2000s</button>
-                                <button class="dropdown-item">2009s</button>
+                            <ul class="dropdown-menu" id="year-list" aria-labelledby="navbarDropdownMenuLink2">
+                                <li>
+                                        <button class="dropdown-item">1950s</button>
+                                </li>
+                                <li>
+                                        <button class="dropdown-item">1960s</button>
+                                </li>
+                                <li>
+                                        <button class="dropdown-item">1970s</button>
+                                </li>
+                                <li>
+                                        <button class="dropdown-item">1980s</button>
+                                </li>
+                                <li>
+                                        <button class="dropdown-item">1990s</button>
+                                </li>
+                                <li>
+                                        <button class="dropdown-item">2000s</button>
+                                </li>
+                                <li>
+                                        <button class="dropdown-item">2009s</button>
+                                </li>
+                                <li>
+                                        <button class="dropdown-item">1950s</button>
+                                </li>
+                                
                             </ul>
                         </div>
                     </div>
@@ -173,13 +189,26 @@
 {% endblock %} {% block javascript %}
 <script type="text/javascript">
     $(document).ready(function () {
+        var inputSinger = document.getElementById("input-singer");
+        var inputSong = document.getElementById("input-song");
+
+
+
+
+
         $.ajax({
             type: 'GET',
             url: '/filters',
             dataType: 'json',
             success: function (data) {
-                var inputSinger = document.getElementById("input-singer");
-                var inputSong = document.getElementById("input-song");
+                // get dropdown years
+                $('#year-list li button').on('click', function(){
+                 console.log($(this).text());
+                 var jsonData=getSliderValues(data);
+                //  $('#datebox').val($(this).text());
+                });
+
+
                 $.ajax({
                     type: 'GET',
                     url: '/artists',
@@ -191,7 +220,7 @@
                         inputSinger.addEventListener('awesomplete-selectcomplete', function (value) {
                             
                             var jsonData = getSliderValues(data);
-                            jsonData.push({ name: 'artist_name', value: inputSinger.value });
+                            // jsonData.push({ name: 'artist_name', value: inputSinger.value });
                             postToFilters(jsonData);
                             // $("html, body").animate({ scrollTop: $(document).height() }, "100");
                         });
@@ -208,7 +237,7 @@
                         inputSong.addEventListener('awesomplete-selectcomplete', function(value){
                             console.log(inputSong.value);
                             var jsonData = getSliderValues(data);
-                            jsonData.push({ name: 'song_title', value: inputSong.value });
+                            // jsonData.push({ name: 'song_title', value: inputSong.value });
                             postToFilters(jsonData);
                         });
                     }
@@ -235,14 +264,6 @@
                     sliderId.noUiSlider.on('change', function (values, handle, unencoded, tap, positions) {
                         jsonData = getSliderValues(data);
                         postToFilters(jsonData);
-                        if(inputSong.value!=""){
-                            console.log(inputSinger.value);
-                            jsonData.push({ name: 'song_title', value: inputSong.value });
-                        }
-                        if(inputSinger.value!=""){
-                            console.log(inputSinger.value);
-                            jsonData.push({ name: 'artist_name', value: inputSong.value });
-                        }
                     });
                     $(checkboxId).change(function (event) {
                         if ($(this).prop('checked')) {
@@ -272,6 +293,16 @@
                     jsonData.push({ name: element.name, value: sliderItem.noUiSlider.get() });
                 }
             });
+            if(inputSong.value!=""){
+                jsonData.push({ name: 'song_title', value: inputSong.value });
+            }
+            if(inputSinger.value!=""){
+
+                jsonData.push({ name: 'artist_name', value: inputSinger.value });
+                console.log(inputSinger.value);
+            }
+            // if($())
+            console.log(jsonData);
             return jsonData;
         }
         function postToFilters(jsonData) {
