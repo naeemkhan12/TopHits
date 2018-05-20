@@ -71,7 +71,7 @@
                 <div class="row">
                     <div class="col-sm">
                         <div class="dropdown">
-                            <a href="#" class="btn btn-default dropdown-toggle " data-toggle="dropdown" id="navbarDropdownMenuLink2">
+                            <a href="#" id="selected-year" class="btn btn-default dropdown-toggle " data-toggle="dropdown" id="navbarDropdownMenuLink2">
                                 Year
                             </a>
                             <ul class="dropdown-menu" id="year-list" aria-labelledby="navbarDropdownMenuLink2">
@@ -192,10 +192,6 @@
         var inputSinger = document.getElementById("input-singer");
         var inputSong = document.getElementById("input-song");
 
-
-
-
-
         $.ajax({
             type: 'GET',
             url: '/filters',
@@ -203,8 +199,11 @@
             success: function (data) {
                 // get dropdown years
                 $('#year-list li button').on('click', function(){
-                 console.log($(this).text());
+                 console.log($(this).text().trim());
+                 var dropdownValue=$(this).text().trim();
                  var jsonData=getSliderValues(data);
+                 jsonData.push({name:'years',value:dropdownValue});
+                 postToFilters(jsonData);
                 //  $('#datebox').val($(this).text());
                 });
 
@@ -302,7 +301,6 @@
                 console.log(inputSinger.value);
             }
             // if($())
-            console.log(jsonData);
             return jsonData;
         }
         function postToFilters(jsonData) {

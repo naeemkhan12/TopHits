@@ -107,7 +107,7 @@ def query_builder(values):
         if value['name']!='artist_name' and value['name']!='song_title' and value['name']!='years':
             query_values.update({value['name']: {"$min": [float(value['value']),"$"+value['name']]}})
         else:
-            # query_values.update({value['name']: "$"+value['name']})
+            query_values.update({value['name']: "$"+value['name']})
             query.append({'$match':{value['name']:value['value']}})
         sort_values.append((value['name'],-1))
     query_values.update({"_id":0})
