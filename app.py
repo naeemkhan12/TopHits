@@ -80,6 +80,22 @@ def filter_on_attr():
     query_result=query_builder(content)
     return jsonify(query_result)
 
+@app.route('/artists')
+def get_artists():
+    songs=db.songs
+    query_result=songs.find().distinct('artist_name')
+    return jsonify(query_result)
+
+
+@app.route('/songs')
+def get_singers():
+    songs=db.songs
+    query_result=songs.find().distinct('song_title')
+    return jsonify(query_result)
+
+
+
+
 def query_builder(values):
     query_values= dict()
     sort_values=[]
@@ -87,14 +103,19 @@ def query_builder(values):
     # results= { $project:{ title:"$song_title",loudness: { $min: [-11.091,"$loudness"] },key: { $min: [5,"$key"] }}}
     # $project:{ title:"$song_title",loudness: { $min: [-11.091,"$loudness"] },key: { $min: [5,"$key"] }}
     # db.songs.aggregate([{ $project:{ title:"$song_title",loudness: { $min: [-11.091,"$loudness"] },key: { $min: [5,"$key"] }}}, {$sort:{loudness:-1,key:-1}},{$limit:5}])
-    query_values.update({"_id":0})
-    query_values.update({"title":"$song_title"})
     for value in values:
-        query_values.update({value['name']: {"$min": [value['value'],"$"+value['name']]}})
+        if value['name']!='artist_name' and value['name']!='song_title' and value['name']!='years':
+            query_values.update({value['name']: {"$min": [float(value['value']),"$"+value['name']]}})
+        else:
+            # query_values.update({value['name']: "$"+value['name']})
+            query.append({'$match':{value['name']:value['value']}})
         sort_values.append((value['name'],-1))
+    query_values.update({"_id":0})
+    query_values.update({"Artist Name":"$artist_name"})
+    query_values.update({"Song Title":"$song_title"})
     query.append({"$project":query_values})
     query.append({"$sort":SON(sort_values)})
-    query.append({"$limit":5})
+    query.append({"$limit":10})
     query_result=list(db.songs.aggregate(query))
     # app.logger.debug(pprint.pprint(query_result))
     # for value in query_result:

@@ -29,13 +29,9 @@
     </div>
     <div class="section">
         <div class="container">
-                <h3 class="title">Popular Searches</h3>
-                <h5 class="description">Common searches made by billions of people based on their interestes,
-                    yours might lie in between them. Check this out . . .
-                </h5>
-                <div class="col-sm-10">
+            <!-- <div class="col-sm-10">
                     <div class="row">
-                            <input type="text" class="col-lg-10 awesomplete"
+                            <input type="text" class="col-lg-10 awesomplete" id="input-qs"
                             data-list="What are the top 5 most pleasant songs across all years?,
                                     What are the top 10 songs with maximum energy across all years?,
                                     What are the 5 songs with minimum sound quailty?,
@@ -47,15 +43,15 @@
                         
                     </div>
                         
-                </div>
-                <!-- <div class="col-sm-2">
+                </div> -->
+            <!-- <div class="col-sm-2">
                     <button class="btn btn-default fa fa-search">Search</button>
                 </div> -->
         </div>
     </div>
     <div class="section">
         <div class="container">
-                
+
             <!-- <div class="button-container">
                 <a href="#button" class="btn btn-primary btn-round btn-lg">Follow</a>
                 <a href="#button" class="btn btn-default btn-round btn-lg btn-icon" rel="tooltip" title="Follow me on Twitter">
@@ -65,11 +61,46 @@
                     <i class="fa fa-instagram"></i>
                 </a>
             </div> -->
-            <h3 class="title">Advanced Queries</h3>
-            <h5 class="description">If common popular searches does not cover your interest, here is an 
-                advanced query to find songs with granular control over song's attributes. Check this out . . .
-            </h5>
+
             <div class="container">
+                <h3 class="title">Popular Searches</h3>
+                <h5 class="description">Common searches made by billions of people based on their interestes, yours might lie in between them. Check
+                    this out . . .
+                </h5>
+
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="dropdown">
+                            <a href="#" class="btn btn-default dropdown-toggle " data-toggle="dropdown" id="navbarDropdownMenuLink2">
+                                Year
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
+                                <button class="dropdown-item">1950s</button>
+                                <button class="dropdown-item">1960s</button>
+                                <!-- <div class="dropdown-divider"></div> -->
+                                <button class="dropdown-item">1970s</button>
+                                <!-- <div class="dropdown-divider"></div> -->
+                                <button class="dropdown-item">1980s</button>
+                                <button class="dropdown-item">1990s</button>
+                                <button class="dropdown-item">2000s</button>
+                                <button class="dropdown-item">2009s</button>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <input type="text" id="input-singer" placeholder="Artist Name">
+                    </div>
+                    <div class="col-sm">
+                        <input type="text" id="input-song" placeholder="Song title">
+                    </div>
+                </div>
+
+            </div>
+            <div class="container">
+                <h3 class="title">Advanced Queries</h3>
+                <h5 class="description">If common popular searches does not cover your interest, here is an advanced query to find songs with granular
+                    control over song's attributes. Check this out . . .
+                </h5>
                 <div class="row">
                     {% for elem in elements%}
                     <div class="col-sm-6">
@@ -96,7 +127,7 @@
                     {% endfor %}
 
                 </div>
-                <div class="container">
+                <div class="container" style="margin-top: 5%">
                     <table class="table" id='results'>
                     </table>
                 </div>
@@ -111,20 +142,16 @@
             <nav>
                 <ul>
                     <li>
-                        <a href="https://www.creative-tim.com">
-                            Creative Tim
+                        <a href="/">
+                            Home
                         </a>
                     </li>
                     <li>
-                        <a href="http://presentation.creative-tim.com">
+                        <a href="#">
                             About Us
                         </a>
                     </li>
-                    <li>
-                        <a href="http://blog.creative-tim.com">
-                            Blog
-                        </a>
-                    </li>
+                   
                     <li>
                         <a href="https://github.com/creativetimofficial/now-ui-kit/blob/master/LICENSE.md">
                             MIT License
@@ -146,18 +173,54 @@
 {% endblock %} {% block javascript %}
 <script type="text/javascript">
     $(document).ready(function () {
-        // the body of this function is in assets/js/now-ui-kit.js
         $.ajax({
             type: 'GET',
             url: '/filters',
             dataType: 'json',
             success: function (data) {
+                var inputSinger = document.getElementById("input-singer");
+                var inputSong = document.getElementById("input-song");
+                $.ajax({
+                    type: 'GET',
+                    url: '/artists',
+                    dataType: 'json',
+                    success: function (artists) {
+                        new Awesomplete(inputSinger, {
+                            list: artists
+                        });
+                        inputSinger.addEventListener('awesomplete-selectcomplete', function (value) {
+                            
+                            var jsonData = getSliderValues(data);
+                            jsonData.push({ name: 'artist_name', value: inputSinger.value });
+                            postToFilters(jsonData);
+                            // $("html, body").animate({ scrollTop: $(document).height() }, "100");
+                        });
+                    }
+                });
+                    $.ajax({
+                        type: 'GET',
+                    url: '/songs',
+                    dataType: 'json',
+                    success: function(songs){
+                        new Awesomplete(inputSong, {
+                        list: songs
+                        });
+                        inputSong.addEventListener('awesomplete-selectcomplete', function(value){
+                            console.log(inputSong.value);
+                            var jsonData = getSliderValues(data);
+                            jsonData.push({ name: 'song_title', value: inputSong.value });
+                            postToFilters(jsonData);
+                        });
+                    }
+                    });
+
+
                 $.each(data, function (index, item) {
                     var sliderId = document.getElementById("slider-" + item.name);
                     var checkboxId = document.getElementById("checkbox-" + item.name);
                     noUiSlider.create(sliderId, {
                         start: item.min,
-                        tooltips:[true],
+                        tooltips: [true],
                         connect: [true, false],
                         range: {
                             min: item.min,
@@ -167,36 +230,19 @@
                     if (!$(checkboxId).is(':checked')) {
                         sliderId.setAttribute('disabled', true);
                     }
+                    // check for artist names and songs values filters
+
                     sliderId.noUiSlider.on('change', function (values, handle, unencoded, tap, positions) {
-                        var jsonData=[];
-                        data.forEach(element => {
-                            var sliderItem=document.getElementById("slider-" + element.name);
-                            if(!sliderItem.hasAttribute('disabled')){
-                                // console.log("Name: ", element.name, "Min: ", element.min, "Max: ", element.max, "Current: ", sliderItem.noUiSlider.get());
-                                jsonData.push({name: element.name,value: sliderItem.noUiSlider.get()});
-                            }
-                        });
-                        // $.post('/filters/attributes',jsonData, function(data,status){
-                        // console.log(data,status);
-                        // });
-                        // console.log(jsonData);
-                        $.ajax({
-                            type:'POST',
-                            url: '/filters/attributes',
-                            dataType : "json",
-                            contentType: "application/json; charset=utf-8",
-                            data: JSON.stringify(jsonData),
-                            success: function(data,status){
-                                // console.log("Data has Been Sent",data,status);
-                                response=data;
-                                console.log(data);
-                                createTable(data);
-                                // titles=['My life','Be together','work work work','Dance Dance','Let be'];
-                                // createTable([{Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)},
-                                // {Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)},
-                                // {Song:titles[Math.floor(Math.random() * 5)],Loudness:Math.floor(Math.random() * 50),Speechiness:Math.floor(Math.random() * 50)}]);
-                            }
-                        });
+                        jsonData = getSliderValues(data);
+                        postToFilters(jsonData);
+                        if(inputSong.value!=""){
+                            console.log(inputSinger.value);
+                            jsonData.push({ name: 'song_title', value: inputSong.value });
+                        }
+                        if(inputSinger.value!=""){
+                            console.log(inputSinger.value);
+                            jsonData.push({ name: 'artist_name', value: inputSong.value });
+                        }
                     });
                     $(checkboxId).change(function (event) {
                         if ($(this).prop('checked')) {
@@ -208,42 +254,66 @@
                             sliderId.setAttribute('disabled', true);
                         }
                     });
-                    // $.each(item,function(key,value){
-                    //     console.log(key,value);
-
-
-                    // });
 
                 });
 
             }
 
         });
-        function createTable(data){
-            if(!$('#results').empty()){
+        // get slider current values
+        function getSliderValues(data) {
+            var jsonData = [];
+            console.log(data)
+            data.forEach(element => {
+                var sliderItem = document.getElementById("slider-" + element.name);
+                if (!sliderItem.hasAttribute('disabled')) {
+                    console.log(element.name);
+                    // console.log("Name: ", element.name, "Min: ", element.min, "Max: ", element.max, "Current: ", sliderItem.noUiSlider.get());
+                    jsonData.push({ name: element.name, value: sliderItem.noUiSlider.get() });
+                }
+            });
+            return jsonData;
+        }
+        function postToFilters(jsonData) {
+            $.ajax({
+                type: 'POST',
+                url: '/filters/attributes',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(jsonData),
+                success: function (data, status) {
+                    response = data;
+                    createTable(data);
+                    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+
+                }
+            });
+        }
+        function createTable(data) {
+            if (!$('#results').empty()) {
                 $('#results tr').remove();
                 // console.log('data is removed');
             }
-            tHeader=$('<thead class="thead-striped"></thead>');
-                tHeaderRow=$('<tr></tr>');
-                if(data[0]!=null){
-                    Object.keys(data[0]).forEach(function(key){
-                        tHeaderRow.append($('<th></th>').text(key.toUpperCase()));
-                        // console.log(key);
-                    });
-                    tHeader.append(tHeaderRow);
-                    $('#results').append(tHeader);         
-                }
-                data.forEach(function(item){
-                    tRow=$('<tr></tr>');
-                    Object.keys(item).forEach(function(key) {  
-                        // alert(item[key]); // alerts value
-                        tRow.append($('<td></td>').text(item[key]));
-                        // console.log(item[key]);
-                    });
-                    $('#results').append(tRow);
+            tHeader = $('<thead class="thead-striped"></thead>');
+            tHeaderRow = $('<tr></tr>');
+            if (data[0] != null) {
+                Object.keys(data[0]).forEach(function (key) {
+                    tHeaderRow.append($('<th></th>').text(key.toUpperCase()));
+                    // console.log(key);
                 });
+                tHeader.append(tHeaderRow);
+                $('#results').append(tHeader);
+            }
+            data.forEach(function (item) {
+                tRow = $('<tr></tr>');
+                Object.keys(item).forEach(function (key) {
+                    // alert(item[key]); // alerts value
+                    tRow.append($('<td></td>').text(item[key]));
+                    // console.log(item[key]);
+                });
+                $('#results').append(tRow);
+            });
         }
-       
+
     });
 </script> {% endblock %}

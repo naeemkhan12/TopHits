@@ -27,6 +27,15 @@
     color: #f96332;
 }
 .awesomplete{
+    margin: 0px;
+    margin: 30px 0px;
+    padding: 0px;
     width: 100%;
+}
+.table {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+.dropdown{
+    margin: 20px 0px;
 }
 
