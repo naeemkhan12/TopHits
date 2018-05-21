@@ -46,9 +46,6 @@ def aboutUs():
 @app.route('/profile')
 def profile():
     return render_template('profile.html')
-@app.route('/contact')
-def getcontactUs():
-    return render_template("contactus.html")
 @app.route('/catalog')
 def catalog():
     songs=db.songs
