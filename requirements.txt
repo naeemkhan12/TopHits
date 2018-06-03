@@ -1,4 +1,5 @@
 Flask==0.12
 PyMongo
+flask_pymongo
 Werkzeug==0.10.1
 flask-login==0.4.1
